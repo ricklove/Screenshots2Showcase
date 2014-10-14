@@ -27,9 +27,15 @@ Screenshots 2 Showcase
 - Flip sprite for right alignment
 - Create sample scene
 
+## Period ?
+
+### 2014-10-14 4:30-6:09
+
+- Render text with OnGUI
+
+
 # TODO
 
-- Redo text with onGUI
 
 - Test font size at different screen ratios (running the demo.exe fails)
 

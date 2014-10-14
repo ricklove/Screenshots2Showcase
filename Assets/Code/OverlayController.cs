@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 [ExecuteInEditMode]
 public class OverlayController : MonoBehaviour
@@ -11,10 +12,14 @@ public class OverlayController : MonoBehaviour
     //public float cameraSize = 3;
     public float dialogHeightRatio = 0.25f;
     public float paddingRatio = 0.05f;
-    public int maxFontSize = 128;
+    //public int maxFontSize = 128;
     //public Font font = null;
-    public float fontAdjustment = 1.0f;
+    //public float fontAdjustment = 1.0f;
     public string dialogText = "";
+
+    public GUIStyle fontStyle = GUI.skin.box;
+
+
     private Camera _camera;
     private SpriteRenderer _characterRenderer;
     private SpriteRenderer _backgroundRenderer;
@@ -33,9 +38,9 @@ public class OverlayController : MonoBehaviour
                 //+ 43 * cameraSize.GetHashCode()
                     + 43 * dialogHeightRatio.GetHashCode()
                     + 43 * paddingRatio.GetHashCode()
-                    + 43 * maxFontSize.GetHashCode()
+                //  + 43 * maxFontSize.GetHashCode()
                 //+ 43 * (font == null ? 1 : font.GetHashCode())
-                    + 43 * fontAdjustment.GetHashCode()
+                //    + 43 * fontAdjustment.GetHashCode()
                     + 43 * dialogText.GetHashCode();
         }
     }
@@ -136,78 +141,207 @@ public class OverlayController : MonoBehaviour
         _backgroundRenderer.transform.localScale = new Vector3(bWidthScale, bHeightScale, 1);
 
 
-        DrawTextWithTextMesh(cameraViewportWorldWidth, paddedCameraWidth, spriteWidth, characterPosition, characterAlignment);
+        //DrawTextWithTextMesh(cameraViewportWorldWidth, paddedCameraWidth, spriteWidth, characterPosition, characterAlignment);
+        DrawText(cameraViewportWorldWidth, cameraViewportWorldHeight, paddedCameraWidth, dialogHeight, spriteWidth, characterPosition, characterAlignment);
 
 
         Debug.Log("End Redraw");
     }
 
-    private void DrawTextWithTextMesh(float cameraViewportWorldWidth, float paddedCameraViewportWorldWidth, float spriteWidth, Vector3 characterPosition, CharacterAlignment characterAlignment)
+    //private void DrawTextWithTextMesh(float cameraViewportWorldWidth, float paddedCameraViewportWorldWidth, float dialogHeight, float characterWidth, Vector3 characterPosition, CharacterAlignment characterAlignment)
+    //{
+    //    // Show dialog text using a text mesh
+    //    var spriteRadius = characterWidth / 2.0f;
+
+    //    switch (characterAlignment)
+    //    {
+    //        case CharacterAlignment.BottomRight:
+    //        case CharacterAlignment.TopRight:
+    //            _dialogTextMesh.anchor = TextAnchor.MiddleRight;
+    //            _dialogTextMesh.transform.localPosition = characterPosition - new Vector3(spriteRadius, 0, 0);
+    //            break;
+
+    //        case CharacterAlignment.BottomLeft:
+    //        case CharacterAlignment.TopLeft:
+    //        default:
+    //            _dialogTextMesh.anchor = TextAnchor.MiddleLeft;
+    //            _dialogTextMesh.transform.localPosition = characterPosition + new Vector3(spriteRadius, 0, 0);
+    //            break;
+    //    }
+
+
+    //    _dialogTextMesh.text = dialogText;
+
+    //    //if (font != null)
+    //    //{
+    //    //    _dialogTextMesh.font = font;
+    //    //}
+
+    //    var cameraScreenLeft = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(-paddedCameraViewportWorldWidth * 0.5f, 0, 0));
+    //    var cameraScreenRight = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(paddedCameraViewportWorldWidth * 0.5f, 0, 0));
+    //    var cameraScreenWidth = cameraScreenRight.x - cameraScreenLeft.x;
+    //    var pixelsPerUnit = cameraScreenWidth / cameraViewportWorldWidth;
+    //    var textWidthPixels = pixelsPerUnit * (paddedCameraViewportWorldWidth - characterWidth);
+
+    //    var style = new GUIStyle() { font = _dialogTextMesh.font, fontSize = maxFontSize };
+    //    var content = new GUIContent() { text = dialogText };
+
+    //    var width = style.CalcSize(content).x;
+
+    //    // Reduce the font size until it is small enough
+    //    var attempts = 0;
+    //    while (width > textWidthPixels)
+    //    {
+    //        style.fontSize = (int)(style.fontSize * 0.8f);
+    //        width = style.CalcSize(content).x;
+
+    //        attempts++;
+
+    //        // Break to avoid infinite loop an killing unity
+    //        if (attempts > 100)
+    //        {
+    //            break;
+    //        }
+    //    }
+
+    //    // Now use the font size in the text mesh
+    //    _dialogTextMesh.fontSize = (int)(style.fontSize * fontAdjustment);
+    //    _dialogTextMesh.characterSize = _camera.orthographicSize * 0.05f;
+
+    //    // Try to fix font corruption bug
+    //    //_dialogTextMesh.font.RequestCharactersInTexture(_dialogTextMesh.text, _dialogTextMesh.fontSize, _dialogTextMesh.fontStyle);
+    //}
+
+    void DrawText(float cameraViewportWorldWidth, float cameraViewportWorldHeight, float paddedCameraViewportWorldWidth, float dialogWorldHeight, float characterWidth, Vector3 characterPosition, CharacterAlignment characterAlignment)
     {
-        // Show dialog text using a text mesh
-        var spriteRadius = spriteWidth / 2.0f;
+        // TEMP: Disable Text Mesh
+        _dialogTextMesh.gameObject.SetActive(false);
+
+        if (string.IsNullOrEmpty(dialogText.Trim()))
+        {
+            _onGUIText = "";
+        }
+
+        // Calculate screen rect for text area 
+        // (using screen ratio 0 = left, 1.0 = right, 0 = top, 1.0 = bottom)
+        var textWorldWidth = paddedCameraViewportWorldWidth - characterWidth;
+
+        var widthRatioPerUnit = 1.0f / cameraViewportWorldWidth;
+        var textRatioWidth = textWorldWidth * widthRatioPerUnit;
+
+        var characterRatioWidth = characterWidth * widthRatioPerUnit;
+
+
+        var heightRatioPerUnit = 1.0f / cameraViewportWorldHeight;
+        var dialogRatioHeight = dialogWorldHeight * heightRatioPerUnit;
+        var textRatioHeight = dialogRatioHeight - paddingRatio * 2;
+
+
+        float textRatioLeft;
+        float textRatioTop;
 
         switch (characterAlignment)
         {
-            case CharacterAlignment.BottomRight:
-            case CharacterAlignment.TopRight:
-                _dialogTextMesh.anchor = TextAnchor.MiddleRight;
-                _dialogTextMesh.transform.localPosition = characterPosition - new Vector3(spriteRadius, 0, 0);
-                break;
-
             case CharacterAlignment.BottomLeft:
+                textRatioLeft = paddingRatio + characterRatioWidth;
+                textRatioTop = 1.0f - paddingRatio - textRatioHeight;
+                break;
+            case CharacterAlignment.BottomRight:
+                textRatioLeft = paddingRatio;
+                textRatioTop = 1.0f - paddingRatio - textRatioHeight;
+                break;
             case CharacterAlignment.TopLeft:
+                textRatioLeft = paddingRatio + characterRatioWidth;
+                textRatioTop = paddingRatio;
+                break;
+            case CharacterAlignment.TopRight:
             default:
-                _dialogTextMesh.anchor = TextAnchor.MiddleLeft;
-                _dialogTextMesh.transform.localPosition = characterPosition + new Vector3(spriteRadius, 0, 0);
+                textRatioLeft = paddingRatio;
+                textRatioTop = paddingRatio;
                 break;
         }
 
+        var w = Screen.width;
+        var h = Screen.height;
+        var textRect = new Rect(textRatioLeft * w, textRatioTop * h, textRatioWidth * w, textRatioHeight * h);
 
-        _dialogTextMesh.text = dialogText;
+        // TODO: Measure font size
+        var fontSize = CalculateFontSize(dialogText, textRect.width, textRect.height);
 
-        //if (font != null)
-        //{
-        //    _dialogTextMesh.font = font;
-        //}
-
-        var cameraScreenLeft = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(-paddedCameraViewportWorldWidth * 0.5f, 0, 0));
-        var cameraScreenRight = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(paddedCameraViewportWorldWidth * 0.5f, 0, 0));
-        var cameraScreenWidth = cameraScreenRight.x - cameraScreenLeft.x;
-        var pixelsPerUnit = cameraScreenWidth / cameraViewportWorldWidth;
-        var textWidthPixels = pixelsPerUnit * (paddedCameraViewportWorldWidth - spriteWidth);
-
-        var style = new GUIStyle() { font = _dialogTextMesh.font, fontSize = maxFontSize };
-        var content = new GUIContent() { text = dialogText };
-
-        var width = style.CalcSize(content).x;
-
-        // Reduce the font size until it is small enough
-        var attempts = 0;
-        while (width > textWidthPixels)
-        {
-            style.fontSize = (int)(style.fontSize * 0.8f);
-            width = style.CalcSize(content).x;
-
-            attempts++;
-
-            // Break to avoid infinite loop an killing unity
-            if (attempts > 100)
-            {
-                break;
-            }
-        }
-
-        // Now use the font size in the text mesh
-        _dialogTextMesh.fontSize = (int)(style.fontSize * fontAdjustment);
-        _dialogTextMesh.characterSize = _camera.orthographicSize * 0.05f;
-
-        // Try to fix font corruption bug
-        //_dialogTextMesh.font.RequestCharactersInTexture(_dialogTextMesh.text, _dialogTextMesh.fontSize, _dialogTextMesh.fontStyle);
+        // Set local text fields
+        _onGUIRect = textRect;
+        _onGUIText = dialogText;
+        _onGUIFontSize = fontSize;
     }
 
-    void DrawText()
+    private int CalculateFontSize(string text, float width, float height)
     {
+        var hash = new GuiSizeHash() { Text = text, Width = width, Height = height };
+        return CalculateFontSize(hash);
+    }
+
+    //private System.Collections.Generic.Dictionary<GuiSizeHash, int> _fontSizes = new System.Collections.Generic.Dictionary<GuiSizeHash, int>();
+
+    private int CalculateFontSize(GuiSizeHash item)
+    {
+        var width = item.Width;
+        var height = item.Height;
+
+        // Use a set style
+        var style = fontStyle;
+        // var oSize = style.fontSize;
+
+        //style.fontSize = (int)(height * 0.6f);
+        style.fontSize = (int)(height * 1.0f);
+
+        // Reduce font size if needed
+        var longestWord = item.Text.Split(' ').Where(w => w.Trim().Length > 0).OrderByDescending(w => w.Trim().Length).Select(w => w.Trim()).First();
+        longestWord = "w" + longestWord + "w";
+        var wContent = new GUIContent(longestWord);
+        var content = new GUIContent(item.Text);
+
+        var mSize = style.CalcSize(wContent);
+        var mHeight = style.CalcHeight(content, width);
+
+        while ((mSize.x > width * 0.85f)
+            || (mHeight > height * 0.85f))
+        {
+            var diffRatio = mHeight / (height * 0.9f);
+            var reduce = 1 / diffRatio;
+            var halfReduce = (1 + reduce) / 2;
+            var ratio = Mathf.Min(halfReduce, 0.8f);
+
+            style.fontSize = (int)(style.fontSize * ratio);
+
+            mSize = style.CalcSize(wContent);
+            mHeight = style.CalcHeight(content, width);
+        }
+
+        var fSize = style.fontSize;
+
+        //style.fontSize = oSize;
+        return fSize;
+
+        //_fontSizes[item] = style.fontSize;
+
+        //return _fontSizes[item];
+    }
+
+    private string _onGUIText;
+    private Rect _onGUIRect;
+    private int _onGUIFontSize;
+
+    void OnGUI()
+    {
+        if (!string.IsNullOrEmpty(_onGUIText))
+        {
+            var style = fontStyle;
+            style.fontSize = _onGUIFontSize;
+
+            GUI.Label(_onGUIRect, _onGUIText, style);
+        }
+
+        //GUI.Label(new Rect(10, 10, 150, 150), "TEST");
 
     }
 
@@ -219,4 +353,18 @@ public enum CharacterAlignment
     BottomRight,
     TopLeft,
     TopRight
+}
+
+public struct GuiSizeHash
+{
+    public string Text { get; set; }
+    public float Width { get; set; }
+    public float Height { get; set; }
+
+    public override int GetHashCode()
+    {
+        return Text.GetHashCode()
+            ^ Width.GetHashCode()
+            ^ Height.GetHashCode();
+    }
 }
