@@ -71,12 +71,13 @@ Screenshots 2 Showcase
 	- Font Color
 	- Font
 
-# TODO
-
-
+### 15:08-15:30
 
 - Add overlay manager game object to switch between overlays
 
+
+
+# TODO
 - FUTURE: Choose between text rendering mode
 	- onGUI
 	- NGUI
