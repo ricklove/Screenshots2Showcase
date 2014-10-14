@@ -57,18 +57,23 @@ Screenshots 2 Showcase
 			// GUI.depth = guiDepth;
 			// GUI.DrawTexture(Rect(10,10,60,60), aTexture, ScaleMode.Stretch);
 
-
-# TODO
+### 14:34-15:07
 
 - Simplify Overlay Fields
 	- Character
 	- Background
 	- Character Alignment
-	- Height Ratio
+	- Dialog Height Ratio
 	- Padding Ratio
+	- Max Character Width Ratio
+	- Max Character Height Ratio
 	- Dialog Text
-	- Font
 	- Font Color
+	- Font
+
+# TODO
+
+
 
 - Add overlay manager game object to switch between overlays
 

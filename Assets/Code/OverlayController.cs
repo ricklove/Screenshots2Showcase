@@ -17,7 +17,10 @@ public class OverlayController : MonoBehaviour
 
     public string dialogText = "";
 
-    public GUIStyle fontStyle = GUI.skin.box;
+    public Color textColor;
+    public Font textFont;
+
+    //public GUIStyle textStyle = GUI.skin.label;
 
     public int ChangeHash
     {
@@ -46,13 +49,17 @@ public class OverlayController : MonoBehaviour
                     + 47 * paddingRatio.GetHashCode()
                     + 61 * maxCharacterWidthRatio.GetHashCode()
                     + 67 * maxCharacterHeightRatio.GetHashCode()
-                    + 53 * dialogText.GetHashCode();
+                    + 53 * dialogText.GetHashCode()
+
+                    + 53 * (textColor == null ? 13 : textColor.GetHashCode())
+                    + 53 * (textFont == null ? 17 : textFont.GetHashCode())
+
+                    ;
         }
     }
 
     void Start()
     {
-
     }
 
     private int _lastChangeHash = 0;
@@ -163,7 +170,6 @@ public class OverlayController : MonoBehaviour
 
         textTop = backgroundTop + paddingHeight;
 
-        var textFontSize = FontSizeHelper.CalculateFontSizeToFill(dialogText, Screen.width * textWidth, Screen.height * textHeight, fontStyle);
 
         // Set to draw at the right time
         _gSpriteTexture = character.texture;
@@ -175,8 +181,19 @@ public class OverlayController : MonoBehaviour
 
         _gText = dialogText;
         _gTextRect = new Rect(Screen.width * textLeft, Screen.height * textTop, Screen.width * textWidth, Screen.height * textHeight);
-        _gTextFontSize = textFontSize;
-        _gTextStyle = fontStyle;
+
+        if (_gTextStyle == null)
+        {
+            _gTextStyle = new GUIStyle();
+            _gTextStyle.wordWrap = true;
+            _gTextStyle.alignment = TextAnchor.MiddleCenter;
+        }
+
+        _gTextStyle.normal.textColor = new Color(textColor.r, textColor.g, textColor.b, 1);
+        _gTextStyle.font = textFont;
+
+        _gTextFontSize = FontSizeHelper.CalculateFontSizeToFill(_gText, _gTextRect.width, _gTextRect.height, _gTextStyle);
+
     }
 
     void OnGUI()
