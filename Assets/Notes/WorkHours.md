@@ -21,14 +21,30 @@ Screenshots 2 Showcase
 - Fix text font size
 - Add usable images
 
+### 6:18-6:47
 
+- Scale sprite to fit within height ratio with padding
+- Flip sprite for right alignment
+- Create sample scene
 
 # TODO
 
-- Adjust layout logic:
-	- Have one size: HeightRatio
-	- Scale sprite to fit within height ratio with padding
-	- Stretch background to fill height ratio
+- Redo text with onGUI
 
+- Test font size at different screen ratios (running the demo.exe fails)
+
+- Simplify Overlay Fields
+	- Character
+	- Background
+	- Character Alignment
+	- Height Ratio
+	- Padding Ratio
+	- Dialog Text
 
 - Add overlay manager game object to switch between overlays
+
+
+- FUTURE: Choose between text rendering mode
+	- onGUI
+	- NGUI
+	- new GUI

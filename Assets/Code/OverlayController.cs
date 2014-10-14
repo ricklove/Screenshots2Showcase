@@ -8,7 +8,7 @@ public class OverlayController : MonoBehaviour
     public Sprite character;
     public Sprite background;
     public CharacterAlignment characterAlignment;
-    public float cameraSize = 3;
+    //public float cameraSize = 3;
     public float dialogHeightRatio = 0.25f;
     public float paddingRatio = 0.05f;
     public int maxFontSize = 128;
@@ -30,11 +30,11 @@ public class OverlayController : MonoBehaviour
                     + 23 * character.GetHashCode()
                     + 27 * background.GetHashCode()
                     + 37 * characterAlignment.GetHashCode()
-                    + 43 * cameraSize.GetHashCode()
+                //+ 43 * cameraSize.GetHashCode()
                     + 43 * dialogHeightRatio.GetHashCode()
                     + 43 * paddingRatio.GetHashCode()
                     + 43 * maxFontSize.GetHashCode()
-                    //+ 43 * (font == null ? 1 : font.GetHashCode())
+                //+ 43 * (font == null ? 1 : font.GetHashCode())
                     + 43 * fontAdjustment.GetHashCode()
                     + 43 * dialogText.GetHashCode();
         }
@@ -64,7 +64,7 @@ public class OverlayController : MonoBehaviour
     {
         Debug.Log("Redraw");
 
-        _camera.orthographicSize = cameraSize;
+        //_camera.orthographicSize = cameraSize;
 
         var cameraBottomLeft = _camera.ViewportToWorldPoint(new Vector3(0, 0, _camera.nearClipPlane));
         var cameraTopRight = _camera.ViewportToWorldPoint(new Vector3(1, 1, _camera.nearClipPlane));
@@ -79,6 +79,7 @@ public class OverlayController : MonoBehaviour
         var paddedCameraHeight = cameraHeight * (1.0f - 2 * paddingRatio);
 
         // Resize sprite to fit appropriate size
+        var spriteAvailableSize = dialogHeight - paddingWidth * 2;
 
 
         // Assume using center alignment on the sprites
@@ -89,38 +90,39 @@ public class OverlayController : MonoBehaviour
         var xFromEdge = spriteCenter.x - spriteLeft;
         var yFromEdge = spriteTop - spriteCenter.y;
 
-        var spriteWidth = xFromEdge * 2.0f + paddingWidth;
+        var spriteActualWidth = xFromEdge * 2.0f + paddingWidth;
+        var spriteScale = spriteAvailableSize / spriteActualWidth;
+        var spriteWidth = spriteAvailableSize;
+        var spriteRadius = spriteWidth / 2.0f;
 
         var characterPosition = new Vector3();
+        var flipSprite = false;
 
         switch (characterAlignment)
         {
             case CharacterAlignment.BottomLeft:
-                characterPosition = new Vector3(-0.5f * paddedCameraWidth + xFromEdge, -0.5f * paddedCameraHeight + yFromEdge, 5);
-                _dialogTextMesh.anchor = TextAnchor.MiddleLeft;
-                _dialogTextMesh.transform.localPosition = characterPosition + new Vector3(spriteWidth, 0, 0);
+                characterPosition = new Vector3(-0.5f * paddedCameraWidth + spriteRadius, -0.5f * paddedCameraHeight + spriteRadius, 5);
+                flipSprite = false;
                 break;
             case CharacterAlignment.BottomRight:
-                characterPosition = new Vector3(0.5f * paddedCameraWidth - xFromEdge, -0.5f * paddedCameraHeight + yFromEdge, 5);
-                _dialogTextMesh.anchor = TextAnchor.MiddleRight;
-                _dialogTextMesh.transform.localPosition = characterPosition - new Vector3(spriteWidth, 0, 0);
+                characterPosition = new Vector3(0.5f * paddedCameraWidth - spriteRadius, -0.5f * paddedCameraHeight + spriteRadius, 5);
+                flipSprite = true;
                 break;
             case CharacterAlignment.TopRight:
-                characterPosition = new Vector3(0.5f * paddedCameraWidth - xFromEdge, 0.5f * paddedCameraHeight - yFromEdge, 5);
-                _dialogTextMesh.anchor = TextAnchor.MiddleRight;
-                _dialogTextMesh.transform.localPosition = characterPosition - new Vector3(spriteWidth, 0, 0);
+                characterPosition = new Vector3(0.5f * paddedCameraWidth - spriteRadius, 0.5f * paddedCameraHeight - spriteRadius, 5);
+                flipSprite = true;
                 break;
             case CharacterAlignment.TopLeft:
             default:
-                characterPosition = new Vector3(-0.5f * paddedCameraWidth + xFromEdge, 0.5f * paddedCameraHeight - yFromEdge, 5);
-                _dialogTextMesh.anchor = TextAnchor.MiddleLeft;
-                _dialogTextMesh.transform.localPosition = characterPosition + new Vector3(spriteWidth, 0, 0);
+                characterPosition = new Vector3(-0.5f * paddedCameraWidth + spriteRadius, 0.5f * paddedCameraHeight - spriteRadius, 5);
+                flipSprite = false;
                 break;
         }
 
         // Show sprite
         _characterRenderer.sprite = character;
         _characterRenderer.transform.localPosition = characterPosition;
+        _characterRenderer.transform.localScale = new Vector3(flipSprite ? -spriteScale : spriteScale, spriteScale, spriteScale);
 
         // Show background
         _backgroundRenderer.sprite = background;
@@ -134,7 +136,33 @@ public class OverlayController : MonoBehaviour
         _backgroundRenderer.transform.localScale = new Vector3(bWidthScale, bHeightScale, 1);
 
 
+        DrawTextWithTextMesh(cameraWidth, paddedCameraWidth, spriteWidth, spriteRadius, characterPosition, characterAlignment);
+
+
+        Debug.Log("End Redraw");
+    }
+
+    private void DrawTextWithTextMesh(float cameraWidth, float paddedCameraWidth, float spriteWidth, float spriteRadius, Vector3 characterPosition, CharacterAlignment characterAlignment)
+    {
         // Show dialog text using a text mesh
+
+        switch (characterAlignment)
+        {
+            case CharacterAlignment.BottomRight:
+            case CharacterAlignment.TopRight:
+                _dialogTextMesh.anchor = TextAnchor.MiddleRight;
+                _dialogTextMesh.transform.localPosition = characterPosition - new Vector3(spriteRadius, 0, 0);
+                break;
+
+            case CharacterAlignment.BottomLeft:
+            case CharacterAlignment.TopLeft:
+            default:
+                _dialogTextMesh.anchor = TextAnchor.MiddleLeft;
+                _dialogTextMesh.transform.localPosition = characterPosition + new Vector3(spriteRadius, 0, 0);
+                break;
+        }
+
+
         _dialogTextMesh.text = dialogText;
 
         //if (font != null)
@@ -171,13 +199,15 @@ public class OverlayController : MonoBehaviour
 
         // Now use the font size in the text mesh
         _dialogTextMesh.fontSize = (int)(style.fontSize * fontAdjustment);
-        _dialogTextMesh.characterSize = cameraSize * 0.05f;
+        _dialogTextMesh.characterSize = _camera.orthographicSize * 0.05f;
 
         // Try to fix font corruption bug
         //_dialogTextMesh.font.RequestCharactersInTexture(_dialogTextMesh.text, _dialogTextMesh.fontSize, _dialogTextMesh.fontStyle);
+    }
 
+    void DrawText()
+    {
 
-        Debug.Log("End Redraw");
     }
 
 }
