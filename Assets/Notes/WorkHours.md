@@ -36,6 +36,27 @@ Screenshots 2 Showcase
 
 # TODO
 
+
+- Rafactor to use OnGUI for everything
+	- Calculate all rects in screen ratios
+	- Allow character to go beyond background
+		- DialogHeightRatio
+		- PaddingRatio
+		- MaxCharacterWidthRatio
+		- MaxCharacterHeightRatio
+	- Set layout fields in UpdateLayout
+		- text
+		- textRect
+		- textFontSize
+		- characterImage
+		- characterRect
+		- backgroundImage
+		- backgroundRect
+	- DrawLayout at appropriate time
+		- DrawLayoutWithOnGUI in OnGUI
+			// GUI.depth = guiDepth;
+			// GUI.DrawTexture(Rect(10,10,60,60), aTexture, ScaleMode.Stretch);
+
 - Simplify Overlay Fields
 	- Character
 	- Background

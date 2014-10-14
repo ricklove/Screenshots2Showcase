@@ -97,7 +97,7 @@ Transform:
   m_PrefabInternal: {fileID: 1593700019}
   m_GameObject: {fileID: 149403942}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.8000977, z: 5}
+  m_LocalPosition: {x: 0, y: -3.8000977, z: 5}
   m_LocalScale: {x: 2.93208694, y: 1.07398939, z: 1}
   m_Children: []
   m_Father: {fileID: 1102367792}
@@ -677,7 +677,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 21300000, guid: 63a8389e784557a42a0837c11201a900, type: 3}
   background: {fileID: 21300000, guid: eef2ffc60fbed6c4dabb49c84bcfbb86, type: 3}
-  characterAlignment: 2
+  characterAlignment: 0
   dialogHeightRatio: .25
   paddingRatio: .00999999978
   dialogText: Cool Screenshots!
@@ -971,7 +971,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.8000977
+      value: -3.8000977
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: m_LocalScale.x
@@ -983,7 +983,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.8000977
+      value: -3.8000977
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: m_LocalScale.x
@@ -999,7 +999,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: characterAlignment
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: paddingRatio
@@ -1007,7 +1007,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: fontStyle.m_FontSize
-      value: 31
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 33ba441cbe05b4a43b6cf2af60ae1126, type: 2}
       propertyPath: dialogHeightRatio
@@ -1264,7 +1264,7 @@ Transform:
   m_PrefabInternal: {fileID: 1593700019}
   m_GameObject: {fileID: 2021937674}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.25488281, y: 3.8000977, z: 5}
+  m_LocalPosition: {x: -6.25488281, y: -3.8000977, z: 5}
   m_LocalScale: {x: .780045569, y: .780045569, z: .780045569}
   m_Children: []
   m_Father: {fileID: 1102367792}

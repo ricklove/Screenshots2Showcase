@@ -12,6 +12,10 @@ public class OverlayController : MonoBehaviour
     //public float cameraSize = 3;
     public float dialogHeightRatio = 0.25f;
     public float paddingRatio = 0.05f;
+
+    public float maxCharacterWidthRatio = 0.25f;
+    public float maxCharacterHeightRatio = 0.25f;
+
     //public int maxFontSize = 128;
     //public Font font = null;
     //public float fontAdjustment = 1.0f;
@@ -35,19 +39,23 @@ public class OverlayController : MonoBehaviour
             if (paddingRatio < 0f) { paddingRatio = 0f; }
             if (paddingRatio > dialogHeightRatio * 0.25f) { paddingRatio = dialogHeightRatio * 0.25f; }
 
+            if (maxCharacterWidthRatio < 0.1f) { maxCharacterWidthRatio = 0.1f; }
+            if (maxCharacterWidthRatio > 0.8f) { maxCharacterWidthRatio = 0.8f; }
+
+            if (maxCharacterHeightRatio < 0.1f) { maxCharacterHeightRatio = 0.1f; }
+            if (maxCharacterHeightRatio > 0.8f) { maxCharacterHeightRatio = 0.8f; }
+
             return
                     17 * Screen.width.GetHashCode()
                     + 19 * Screen.height.GetHashCode()
                     + 23 * character.GetHashCode()
                     + 27 * background.GetHashCode()
                     + 37 * characterAlignment.GetHashCode()
-                //+ 43 * cameraSize.GetHashCode()
                     + 43 * dialogHeightRatio.GetHashCode()
-                    + 43 * paddingRatio.GetHashCode()
-                //  + 43 * maxFontSize.GetHashCode()
-                //+ 43 * (font == null ? 1 : font.GetHashCode())
-                //    + 43 * fontAdjustment.GetHashCode()
-                    + 43 * dialogText.GetHashCode();
+                    + 47 * paddingRatio.GetHashCode()
+                    + 61 * maxCharacterWidthRatio.GetHashCode()
+                    + 67 * maxCharacterHeightRatio.GetHashCode()
+                    + 53 * dialogText.GetHashCode();
         }
     }
 
@@ -75,7 +83,92 @@ public class OverlayController : MonoBehaviour
         }
     }
 
+
+    private Texture2D _gSpriteTexture;
+    private Rect _gSpriteRect;
+    private bool _gSpriteShouldFlip;
+
     void Redraw()
+    {
+        // Calculate all rects in screen ratios
+
+        // Calculate character size
+        var spriteTextureWidth = character.texture.width;
+        var spriteTextureHeight = character.texture.height;
+
+        var spriteWidthHeightRatio = 1.0f * spriteTextureWidth / spriteTextureHeight;
+        var maxWidth = Screen.width * maxCharacterWidthRatio;
+        var maxHeight = Screen.height * maxCharacterHeightRatio;
+
+        // Try width
+        var spriteActualWidth = maxWidth;
+        var spriteActualHeight = spriteActualWidth / spriteWidthHeightRatio;
+
+        // Use height if that is too big
+        if (spriteActualHeight > maxHeight)
+        {
+            spriteActualHeight = maxHeight;
+            spriteActualWidth = spriteActualHeight * spriteWidthHeightRatio;
+        }
+
+        // Convert back to ratio 
+        var spriteWidth = spriteActualWidth / Screen.width;
+        var spriteHeight = spriteActualHeight / Screen.height;
+
+        // Set sprite left and top
+        var paddingWidth = paddingRatio;
+        var paddingHeight = paddingRatio;
+
+        float spriteLeft;
+        float spriteTop;
+        bool flipSprite;
+
+        switch (characterAlignment)
+        {
+            case CharacterAlignment.BottomLeft:
+                spriteLeft = paddingWidth;
+                spriteTop = 1.0f - (paddingHeight + spriteHeight);
+                flipSprite = false;
+                break;
+            case CharacterAlignment.BottomRight:
+                spriteLeft = 1.0f - (paddingWidth + spriteWidth);
+                spriteTop = 1.0f - (paddingHeight + spriteHeight);
+                flipSprite = true;
+                break;
+            case CharacterAlignment.TopRight:
+                spriteLeft = 1.0f - (paddingWidth + spriteWidth);
+                spriteTop = paddingHeight;
+                flipSprite = true;
+                break;
+            case CharacterAlignment.TopLeft:
+            default:
+                spriteLeft = paddingWidth;
+                spriteTop = paddingHeight;
+                flipSprite = false;
+                break;
+        }
+
+        _gSpriteTexture = character.texture;
+        _gSpriteShouldFlip = flipSprite;
+        _gSpriteRect = new Rect(Screen.width * spriteLeft, Screen.height * spriteTop, Screen.width * spriteWidth, Screen.height * spriteHeight);
+
+
+
+        //- Set layout fields in UpdateLayout
+        //    - text
+        //    - textRect
+        //    - textFontSize
+        //    - characterImage
+        //    - characterRect
+        //    - backgroundImage
+        //    - backgroundRect
+        //- DrawLayout at appropriate time
+        //    - DrawLayoutWithOnGUI in OnGUI
+        //        // GUI.depth = guiDepth;
+        //        // GUI.DrawTexture(Rect(10,10,60,60), aTexture, ScaleMode.Stretch);
+    }
+
+    void RedrawOLD()
     {
         Debug.Log("Redraw");
 
@@ -275,8 +368,8 @@ public class OverlayController : MonoBehaviour
         var h = Screen.height;
         var textRect = new Rect(textRatioLeft * w, textRatioTop * h, textRatioWidth * w, textRatioHeight * h);
 
-        // TODO: Measure font size
-        var fontSize = CalculateFontSize(dialogText, textRect.width, textRect.height);
+        // Measure font size
+        var fontSize = FontSizeHelper.CalculateFontSizeToFill(dialogText, textRect.width, textRect.height, fontStyle);
 
         // Set local text fields
         _onGUIRect = textRect;
@@ -284,31 +377,57 @@ public class OverlayController : MonoBehaviour
         _onGUIFontSize = fontSize;
     }
 
-    private int CalculateFontSize(string text, float width, float height)
+
+
+    private string _onGUIText;
+    private Rect _onGUIRect;
+    private int _onGUIFontSize;
+
+    void OnGUI()
     {
-        var hash = new GuiSizeHash() { Text = text, Width = width, Height = height };
-        return CalculateFontSize(hash);
+        UpdateLayout();
+
+        if (!string.IsNullOrEmpty(_onGUIText))
+        {
+            var style = fontStyle;
+            style.fontSize = _onGUIFontSize;
+
+            GUI.Label(_onGUIRect, _onGUIText, style);
+        }
+
+
+        if (_gSpriteTexture != null)
+        {
+            // TODO: Flip texture 
+            GUI.DrawTexture(_gSpriteRect, _gSpriteTexture);
+        }
     }
 
-    //private System.Collections.Generic.Dictionary<GuiSizeHash, int> _fontSizes = new System.Collections.Generic.Dictionary<GuiSizeHash, int>();
+}
 
-    private int CalculateFontSize(GuiSizeHash item)
+public enum CharacterAlignment
+{
+    BottomLeft,
+    BottomRight,
+    TopLeft,
+    TopRight
+}
+
+
+
+public static class FontSizeHelper
+{
+    public static int CalculateFontSizeToFill(string text, float width, float height, GUIStyle style)
     {
-        var width = item.Width;
-        var height = item.Height;
+        var oSize = style.fontSize;
 
-        // Use a set style
-        var style = fontStyle;
-        // var oSize = style.fontSize;
-
-        //style.fontSize = (int)(height * 0.6f);
         style.fontSize = (int)(height * 1.0f);
 
         // Reduce font size if needed
-        var longestWord = item.Text.Split(' ').Where(w => w.Trim().Length > 0).OrderByDescending(w => w.Trim().Length).Select(w => w.Trim()).First();
+        var longestWord = text.Split(' ').Where(w => w.Trim().Length > 0).OrderByDescending(w => w.Trim().Length).Select(w => w.Trim()).First();
         longestWord = "w" + longestWord + "w";
         var wContent = new GUIContent(longestWord);
-        var content = new GUIContent(item.Text);
+        var content = new GUIContent(text);
 
         var mSize = style.CalcSize(wContent);
         var mHeight = style.CalcHeight(content, width);
@@ -329,54 +448,8 @@ public class OverlayController : MonoBehaviour
 
         var fSize = style.fontSize;
 
-        //style.fontSize = oSize;
+        style.fontSize = oSize;
         return fSize;
-
-        //_fontSizes[item] = style.fontSize;
-
-        //return _fontSizes[item];
     }
 
-    private string _onGUIText;
-    private Rect _onGUIRect;
-    private int _onGUIFontSize;
-
-    void OnGUI()
-    {
-        UpdateLayout();
-
-        if (!string.IsNullOrEmpty(_onGUIText))
-        {
-            var style = fontStyle;
-            style.fontSize = _onGUIFontSize;
-
-            GUI.Label(_onGUIRect, _onGUIText, style);
-        }
-
-        //GUI.Label(new Rect(10, 10, 150, 150), "TEST");
-
-    }
-
-}
-
-public enum CharacterAlignment
-{
-    BottomLeft,
-    BottomRight,
-    TopLeft,
-    TopRight
-}
-
-public struct GuiSizeHash
-{
-    public string Text { get; set; }
-    public float Width { get; set; }
-    public float Height { get; set; }
-
-    public override int GetHashCode()
-    {
-        return Text.GetHashCode()
-            ^ Width.GetHashCode()
-            ^ Height.GetHashCode();
-    }
 }
