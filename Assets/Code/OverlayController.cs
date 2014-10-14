@@ -36,13 +36,14 @@ public class OverlayController : MonoBehaviour
             // Guarantee valid values
             if (dialogHeightRatio < 0.1f) { dialogHeightRatio = 0.1f; }
             if (dialogHeightRatio > 1f) { dialogHeightRatio = 1f; }
+
             if (paddingRatio < 0f) { paddingRatio = 0f; }
             if (paddingRatio > dialogHeightRatio * 0.25f) { paddingRatio = dialogHeightRatio * 0.25f; }
 
-            if (maxCharacterWidthRatio < 0.1f) { maxCharacterWidthRatio = 0.1f; }
+            if (maxCharacterWidthRatio < 0.1f + paddingRatio * 2) { maxCharacterWidthRatio = 0.1f + paddingRatio * 2; }
             if (maxCharacterWidthRatio > 0.8f) { maxCharacterWidthRatio = 0.8f; }
 
-            if (maxCharacterHeightRatio < 0.1f) { maxCharacterHeightRatio = 0.1f; }
+            if (maxCharacterHeightRatio < 0.1f + paddingRatio * 2) { maxCharacterHeightRatio = 0.1f + paddingRatio * 2; }
             if (maxCharacterHeightRatio > 0.8f) { maxCharacterHeightRatio = 0.8f; }
 
             return
@@ -88,17 +89,28 @@ public class OverlayController : MonoBehaviour
     private Rect _gSpriteRect;
     private bool _gSpriteShouldFlip;
 
+    private Texture2D _gBackgroundTexture;
+    private Rect _gBackgroundRect;
+
+    private string _gText;
+    private Rect _gTextRect;
+    private GUIStyle _gTextStyle;
+    private int _gTextFontSize;
+
     void Redraw()
     {
         // Calculate all rects in screen ratios
+
+        var paddingWidth = paddingRatio;
+        var paddingHeight = paddingRatio;
 
         // Calculate character size
         var spriteTextureWidth = character.texture.width;
         var spriteTextureHeight = character.texture.height;
 
         var spriteWidthHeightRatio = 1.0f * spriteTextureWidth / spriteTextureHeight;
-        var maxWidth = Screen.width * maxCharacterWidthRatio;
-        var maxHeight = Screen.height * maxCharacterHeightRatio;
+        var maxWidth = Screen.width * (maxCharacterWidthRatio - paddingWidth * 2);
+        var maxHeight = Screen.height * (maxCharacterHeightRatio - paddingHeight * 2);
 
         // Try width
         var spriteActualWidth = maxWidth;
@@ -115,13 +127,22 @@ public class OverlayController : MonoBehaviour
         var spriteWidth = spriteActualWidth / Screen.width;
         var spriteHeight = spriteActualHeight / Screen.height;
 
-        // Set sprite left and top
-        var paddingWidth = paddingRatio;
-        var paddingHeight = paddingRatio;
+        //spriteWidth -= paddingWidth * 2;
+        //spriteHeight -= paddingHeight * 2;
 
+        // Set sprite left and top
         float spriteLeft;
         float spriteTop;
         bool flipSprite;
+
+        float backgroundHeight = dialogHeightRatio;
+        float backgroundTop;
+
+        float textHeight = backgroundHeight - paddingHeight * 2;
+        float textWidth = 1.0f - spriteWidth - paddingWidth * 3;
+        float textTop;
+        float textLeft;
+
 
         switch (characterAlignment)
         {
@@ -129,30 +150,49 @@ public class OverlayController : MonoBehaviour
                 spriteLeft = paddingWidth;
                 spriteTop = 1.0f - (paddingHeight + spriteHeight);
                 flipSprite = false;
+                backgroundTop = 1.0f - backgroundHeight;
+                textLeft = spriteWidth + paddingWidth * 2;
                 break;
             case CharacterAlignment.BottomRight:
                 spriteLeft = 1.0f - (paddingWidth + spriteWidth);
                 spriteTop = 1.0f - (paddingHeight + spriteHeight);
                 flipSprite = true;
+                backgroundTop = 1.0f - backgroundHeight;
+                textLeft = paddingWidth;
                 break;
             case CharacterAlignment.TopRight:
                 spriteLeft = 1.0f - (paddingWidth + spriteWidth);
                 spriteTop = paddingHeight;
                 flipSprite = true;
+                backgroundTop = 0;
+                textLeft = paddingWidth;
                 break;
             case CharacterAlignment.TopLeft:
             default:
                 spriteLeft = paddingWidth;
                 spriteTop = paddingHeight;
                 flipSprite = false;
+                backgroundTop = 0;
+                textLeft = spriteWidth + paddingWidth * 2;
                 break;
         }
 
+        textTop = backgroundTop + paddingHeight;
+
+        var textFontSize = FontSizeHelper.CalculateFontSizeToFill(dialogText, Screen.width * textWidth, Screen.height * textHeight, fontStyle);
+
+        // Set to draw at the right time
         _gSpriteTexture = character.texture;
         _gSpriteShouldFlip = flipSprite;
         _gSpriteRect = new Rect(Screen.width * spriteLeft, Screen.height * spriteTop, Screen.width * spriteWidth, Screen.height * spriteHeight);
 
+        _gBackgroundTexture = background.texture;
+        _gBackgroundRect = new Rect(0, Screen.height * backgroundTop, Screen.width, Screen.height * backgroundHeight);
 
+        _gText = dialogText;
+        _gTextRect = new Rect(Screen.width * textLeft, Screen.height * textTop, Screen.width * textWidth, Screen.height * textHeight);
+        _gTextFontSize = textFontSize;
+        _gTextStyle = fontStyle;
 
         //- Set layout fields in UpdateLayout
         //    - text
@@ -387,19 +427,38 @@ public class OverlayController : MonoBehaviour
     {
         UpdateLayout();
 
-        if (!string.IsNullOrEmpty(_onGUIText))
+        //if (!string.IsNullOrEmpty(_onGUIText))
+        //{
+        //    var style = fontStyle;
+        //    style.fontSize = _onGUIFontSize;
+
+        //    GUI.Label(_onGUIRect, _onGUIText, style);
+        //}
+
+        GUI.depth = -10000;
+
+        if (_gBackgroundTexture != null)
         {
-            var style = fontStyle;
-            style.fontSize = _onGUIFontSize;
-
-            GUI.Label(_onGUIRect, _onGUIText, style);
+            GUI.DrawTexture(_gBackgroundRect, _gBackgroundTexture, ScaleMode.StretchToFill);
         }
-
 
         if (_gSpriteTexture != null)
         {
-            // TODO: Flip texture 
-            GUI.DrawTexture(_gSpriteRect, _gSpriteTexture);
+            var aspectRatio = 1.0f * _gSpriteTexture.width / _gSpriteTexture.height;
+
+            GUI.DrawTexture(_gSpriteRect, _gSpriteTexture, ScaleMode.ScaleToFit, true, _gSpriteShouldFlip ? -aspectRatio : aspectRatio);
+        }
+
+        if (!string.IsNullOrEmpty(_gText)
+            && _gTextStyle != null
+            && _gTextRect.width > 0
+            && _gTextRect.height > 0
+            && _gTextFontSize > 0)
+        {
+            var style = _gTextStyle;
+            style.fontSize = _gTextFontSize;
+
+            GUI.Label(_gTextRect, _gText, style);
         }
     }
 
@@ -432,6 +491,8 @@ public static class FontSizeHelper
         var mSize = style.CalcSize(wContent);
         var mHeight = style.CalcHeight(content, width);
 
+        var attempts = 0;
+
         while ((mSize.x > width * 0.85f)
             || (mHeight > height * 0.85f))
         {
@@ -444,6 +505,15 @@ public static class FontSizeHelper
 
             mSize = style.CalcSize(wContent);
             mHeight = style.CalcHeight(content, width);
+
+
+            if (attempts > 100)
+            {
+                // Error
+                break;
+            }
+
+            attempts++;
         }
 
         var fSize = style.fontSize;
