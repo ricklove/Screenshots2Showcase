@@ -36,9 +36,6 @@ Screenshots 2 Showcase
 
 # TODO
 
-
-- Test font size at different screen ratios (running the demo.exe fails)
-
 - Simplify Overlay Fields
 	- Character
 	- Background
@@ -49,8 +46,9 @@ Screenshots 2 Showcase
 	- Font
 	- Font Color
 
-- Add overlay manager game object to switch between overlays
+- Remove text mesh 
 
+- Add overlay manager game object to switch between overlays
 
 - FUTURE: Choose between text rendering mode
 	- onGUI
