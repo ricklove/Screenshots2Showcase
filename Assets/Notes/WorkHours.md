@@ -29,7 +29,7 @@ Screenshots 2 Showcase
 
 ## Period ?
 
-### 2014-10-14 4:30-6:09
+### 2014-10-14 4:30-6:12
 
 - Render text with OnGUI
 
@@ -46,6 +46,8 @@ Screenshots 2 Showcase
 	- Height Ratio
 	- Padding Ratio
 	- Dialog Text
+	- Font
+	- Font Color
 
 - Add overlay manager game object to switch between overlays
 
