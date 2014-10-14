@@ -29,6 +29,12 @@ public class OverlayController : MonoBehaviour
     {
         get
         {
+            // Guarantee valid values
+            if (dialogHeightRatio < 0.1f) { dialogHeightRatio = 0.1f; }
+            if (dialogHeightRatio > 1f) { dialogHeightRatio = 1f; }
+            if (paddingRatio < 0f) { paddingRatio = 0f; }
+            if (paddingRatio > dialogHeightRatio * 0.25f) { paddingRatio = dialogHeightRatio * 0.25f; }
+
             return
                     17 * Screen.width.GetHashCode()
                     + 19 * Screen.height.GetHashCode()
@@ -80,7 +86,7 @@ public class OverlayController : MonoBehaviour
         var cameraViewportWorldWidth = cameraTopRight.x - cameraBottomLeft.x;
         var cameraViewportWorldHeight = cameraTopRight.y - cameraBottomLeft.y;
 
-        var dialogHeight = cameraViewportWorldHeight * dialogHeightRatio;
+        var dialogHeight = cameraViewportWorldHeight * Mathf.Max(0.05f + paddingRatio * 2, dialogHeightRatio);
 
         // Reduce camera width and height to create padding
         var paddingWidth = cameraViewportWorldWidth * paddingRatio;
