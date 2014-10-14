@@ -68,15 +68,15 @@ public class OverlayController : MonoBehaviour
 
         var cameraBottomLeft = _camera.ViewportToWorldPoint(new Vector3(0, 0, _camera.nearClipPlane));
         var cameraTopRight = _camera.ViewportToWorldPoint(new Vector3(1, 1, _camera.nearClipPlane));
-        var cameraWidth = cameraTopRight.x - cameraBottomLeft.x;
-        var cameraHeight = cameraTopRight.y - cameraBottomLeft.y;
+        var cameraViewportWorldWidth = cameraTopRight.x - cameraBottomLeft.x;
+        var cameraViewportWorldHeight = cameraTopRight.y - cameraBottomLeft.y;
 
-        var dialogHeight = cameraHeight * dialogHeightRatio;
+        var dialogHeight = cameraViewportWorldHeight * dialogHeightRatio;
 
         // Reduce camera width and height to create padding
-        var paddingWidth = cameraWidth * paddingRatio;
-        var paddedCameraWidth = cameraWidth * (1.0f - 2 * paddingRatio);
-        var paddedCameraHeight = cameraHeight * (1.0f - 2 * paddingRatio);
+        var paddingWidth = cameraViewportWorldWidth * paddingRatio;
+        var paddedCameraWidth = cameraViewportWorldWidth * (1.0f - 2 * paddingRatio);
+        var paddedCameraHeight = cameraViewportWorldHeight * (1.0f - 2 * paddingRatio);
 
         // Resize sprite to fit appropriate size
         var spriteAvailableSize = dialogHeight - paddingWidth * 2;
@@ -130,21 +130,22 @@ public class OverlayController : MonoBehaviour
 
         _backgroundRenderer.transform.localScale = new Vector3(1, 1, 1);
         var bWidth = _backgroundRenderer.bounds.size.x;
-        var bWidthScale = cameraWidth / bWidth;
+        var bWidthScale = cameraViewportWorldWidth / bWidth;
         var bHeight = _backgroundRenderer.bounds.size.y;
         var bHeightScale = dialogHeight / bHeight * 1.1f;
         _backgroundRenderer.transform.localScale = new Vector3(bWidthScale, bHeightScale, 1);
 
 
-        DrawTextWithTextMesh(cameraWidth, paddedCameraWidth, spriteWidth, spriteRadius, characterPosition, characterAlignment);
+        DrawTextWithTextMesh(cameraViewportWorldWidth, paddedCameraWidth, spriteWidth, characterPosition, characterAlignment);
 
 
         Debug.Log("End Redraw");
     }
 
-    private void DrawTextWithTextMesh(float cameraWidth, float paddedCameraWidth, float spriteWidth, float spriteRadius, Vector3 characterPosition, CharacterAlignment characterAlignment)
+    private void DrawTextWithTextMesh(float cameraViewportWorldWidth, float paddedCameraViewportWorldWidth, float spriteWidth, Vector3 characterPosition, CharacterAlignment characterAlignment)
     {
         // Show dialog text using a text mesh
+        var spriteRadius = spriteWidth / 2.0f;
 
         switch (characterAlignment)
         {
@@ -170,11 +171,11 @@ public class OverlayController : MonoBehaviour
         //    _dialogTextMesh.font = font;
         //}
 
-        var cameraScreenLeft = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(-paddedCameraWidth * 0.5f, 0, 0));
-        var cameraScreenRight = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(paddedCameraWidth * 0.5f, 0, 0));
+        var cameraScreenLeft = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(-paddedCameraViewportWorldWidth * 0.5f, 0, 0));
+        var cameraScreenRight = _camera.WorldToScreenPoint(_camera.transform.position + new Vector3(paddedCameraViewportWorldWidth * 0.5f, 0, 0));
         var cameraScreenWidth = cameraScreenRight.x - cameraScreenLeft.x;
-        var pixelsPerUnit = cameraScreenWidth / cameraWidth;
-        var textWidthPixels = pixelsPerUnit * (paddedCameraWidth - spriteWidth);
+        var pixelsPerUnit = cameraScreenWidth / cameraViewportWorldWidth;
+        var textWidthPixels = pixelsPerUnit * (paddedCameraViewportWorldWidth - spriteWidth);
 
         var style = new GUIStyle() { font = _dialogTextMesh.font, fontSize = maxFontSize };
         var content = new GUIContent() { text = dialogText };
