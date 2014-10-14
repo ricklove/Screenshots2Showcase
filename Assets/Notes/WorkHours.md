@@ -34,8 +34,8 @@ Screenshots 2 Showcase
 - Render text with OnGUI
 
 
-# TODO
-
+### 12:11-12:56
+### 13:50-14:33
 
 - Rafactor to use OnGUI for everything
 	- Calculate all rects in screen ratios
@@ -57,6 +57,9 @@ Screenshots 2 Showcase
 			// GUI.depth = guiDepth;
 			// GUI.DrawTexture(Rect(10,10,60,60), aTexture, ScaleMode.Stretch);
 
+
+# TODO
+
 - Simplify Overlay Fields
 	- Character
 	- Background
@@ -66,8 +69,6 @@ Screenshots 2 Showcase
 	- Dialog Text
 	- Font
 	- Font Color
-
-- Remove text mesh 
 
 - Add overlay manager game object to switch between overlays
 
