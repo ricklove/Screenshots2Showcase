@@ -57,7 +57,11 @@ public class OverlayController : MonoBehaviour
 
     void Update()
     {
+        UpdateLayout();
+    }
 
+    private void UpdateLayout()
+    {
         if (_lastChangeHash != ChangeHash)
         {
             _lastChangeHash = ChangeHash;
@@ -333,6 +337,8 @@ public class OverlayController : MonoBehaviour
 
     void OnGUI()
     {
+        UpdateLayout();
+
         if (!string.IsNullOrEmpty(_onGUIText))
         {
             var style = fontStyle;
