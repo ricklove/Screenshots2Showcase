@@ -98,6 +98,8 @@ public class OverlayManagerController : MonoBehaviour
 
     private bool _isPaused = false;
     private bool _isTakingScreenshots = false;
+    private DateTime _pauseTime;
+    private int _pauseScreenshotCount;
 
     void OnGUI()
     {
@@ -112,6 +114,8 @@ public class OverlayManagerController : MonoBehaviour
                     _isPaused = true;
                     UpdateOverlays();
                     Time.timeScale = 0;
+                    _pauseTime = DateTime.Now;
+                    _pauseScreenshotCount = 0;
                 }
             }
             else
@@ -159,7 +163,8 @@ public class OverlayManagerController : MonoBehaviour
 
         _screenshotSteps = new List<Action>();
 
-        string folderPath = Application.persistentDataPath + "/Screenshots/";
+        var dateTimeString = _pauseTime.ToString("yyyy-MM-dd hh-mm-ss");
+        string folderPath = Application.persistentDataPath + "/Screenshots/" + dateTimeString + "/";
 
         if (!Directory.Exists(folderPath))
         {
@@ -172,7 +177,6 @@ public class OverlayManagerController : MonoBehaviour
             ExplorerHelper.ShowInExplorer(folderPath);
         }
 
-        var dateTimeString = DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
 
         var originalSize = new Rect(0, 0, Screen.width, Screen.height);
 
@@ -184,12 +188,10 @@ public class OverlayManagerController : MonoBehaviour
 
         var sizes = ScreenshotSizeHelper.ScreenShotSizes;
 
-        var i = 0;
-
         foreach (var s in sizes)
         {
             var size = s;
-            var index = i;
+            var index = _pauseScreenshotCount;
 
             // Skip impossible sizes
             var resolution = Screen.currentResolution;
@@ -210,12 +212,11 @@ public class OverlayManagerController : MonoBehaviour
             {
                 Application.CaptureScreenshot(
                     folderPath
-                    + dateTimeString
-                    + " - " + index
+                    + index
                     + " - " + (int)size.width + "x" + (int)size.height + ".png", 1);
             });
 
-            i++;
+            _pauseScreenshotCount++;
         }
 
         _screenshotSteps.Add(() =>

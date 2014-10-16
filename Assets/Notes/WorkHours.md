@@ -91,6 +91,9 @@ Screenshots 2 Showcase
 
 - Change resolution to actual resolutions
 
+### 9:15-9:23
+
+- Organize Screenshot folder
 
 # TODO
 
