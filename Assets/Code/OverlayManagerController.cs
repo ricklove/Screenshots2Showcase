@@ -5,7 +5,7 @@ public class OverlayManagerController : MonoBehaviour
 {
     void Update()
     {
-        DisplayChildren();
+        UpdateOverlays();
     }
 
     private int _lastVisibleChildIndex = 0;
@@ -19,7 +19,7 @@ public class OverlayManagerController : MonoBehaviour
         }
     }
 
-    private void DisplayChildren()
+    public void UpdateOverlays()
     {
         if (IsEditMode)
         {
@@ -77,7 +77,7 @@ public class OverlayManagerController : MonoBehaviour
                 if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "FREEZE"))
                 {
                     _isPaused = true;
-                    DisplayChildren();
+                    UpdateOverlays();
                     Time.timeScale = 0;
                 }
             }
@@ -87,7 +87,7 @@ public class OverlayManagerController : MonoBehaviour
                 if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "PLAY"))
                 {
                     _isPaused = false;
-                    DisplayChildren();
+                    UpdateOverlays();
                     Time.timeScale = 1;
                 }
 
@@ -95,17 +95,18 @@ public class OverlayManagerController : MonoBehaviour
                 {
                     visibleChildIndex--;
                     RotateChildIndex();
-                    DisplayChildren();
+                    UpdateOverlays();
                 }
 
                 if (GUI.Button(new Rect(Screen.width * 0.6f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "NEXT"))
                 {
                     visibleChildIndex++;
                     RotateChildIndex();
-                    DisplayChildren();
+                    UpdateOverlays();
                 }
 
             }
         }
     }
+
 }

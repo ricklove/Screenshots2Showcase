@@ -14,7 +14,7 @@ public class OverlayController : MonoBehaviour
     public float maxCharacterWidthRatio = 0.25f;
     public float maxCharacterHeightRatio = 0.25f;
 
-    public string dialogText = "";
+    public string dialogText = "Great!";
 
     public Color textColor;
     public Font textFont;
@@ -41,8 +41,8 @@ public class OverlayController : MonoBehaviour
             return
                     17 * Screen.width.GetHashCode()
                     + 19 * Screen.height.GetHashCode()
-                    + 23 * character.GetHashCode()
-                    + 27 * background.GetHashCode()
+                    + 23 * (character == null ? 13 : character.GetHashCode())
+                    + 27 * (background == null ? 19 : background.GetHashCode())
                     + 37 * characterAlignment.GetHashCode()
                     + 43 * dialogHeightRatio.GetHashCode()
                     + 47 * paddingRatio.GetHashCode()
@@ -94,8 +94,14 @@ public class OverlayController : MonoBehaviour
         var paddingHeight = paddingRatio;
 
         // Calculate character size
-        var spriteTextureWidth = character.texture.width;
-        var spriteTextureHeight = character.texture.height;
+        var spriteTextureWidth = 1;
+        var spriteTextureHeight = 1;
+
+        if (character != null)
+        {
+            spriteTextureWidth = character.texture.width;
+            spriteTextureHeight = character.texture.height;
+        }
 
         var spriteWidthHeightRatio = 1.0f * spriteTextureWidth / spriteTextureHeight;
         var maxWidth = Screen.width * (maxCharacterWidthRatio - paddingWidth * 2);
@@ -167,12 +173,30 @@ public class OverlayController : MonoBehaviour
 
 
         // Set to draw at the right time
-        _gSpriteTexture = character.texture;
-        _gSpriteShouldFlip = flipSprite;
-        _gSpriteRect = new Rect(Screen.width * spriteLeft, Screen.height * spriteTop, Screen.width * spriteWidth, Screen.height * spriteHeight);
+        if (character != null)
+        {
+            _gSpriteTexture = character.texture;
+            _gSpriteShouldFlip = flipSprite;
+            _gSpriteRect = new Rect(
+                Screen.width*spriteLeft, 
+                Screen.height*spriteTop, 
+                Screen.width*spriteWidth,
+                Screen.height*spriteHeight);
+        }
+        else
+        {
+            _gSpriteTexture = null;
+        }
 
-        _gBackgroundTexture = background.texture;
-        _gBackgroundRect = new Rect(0, Screen.height * backgroundTop, Screen.width, Screen.height * backgroundHeight);
+        if (background != null)
+        {
+            _gBackgroundTexture = background.texture;
+            _gBackgroundRect = new Rect(0, Screen.height * backgroundTop, Screen.width, Screen.height * backgroundHeight);
+        }
+        else
+        {
+            _gBackgroundTexture = null;
+        }
 
         _gText = dialogText;
         _gTextRect = new Rect(Screen.width * textLeft, Screen.height * textTop, Screen.width * textWidth, Screen.height * textHeight);
@@ -181,7 +205,7 @@ public class OverlayController : MonoBehaviour
         {
             _gTextStyle = new GUIStyle
             {
-                wordWrap = true, 
+                wordWrap = true,
                 alignment = TextAnchor.MiddleCenter
             };
         }
