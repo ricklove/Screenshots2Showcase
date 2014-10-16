@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Linq;
 
 [ExecuteInEditMode]
@@ -51,18 +50,14 @@ public class OverlayController : MonoBehaviour
                     + 67 * maxCharacterHeightRatio.GetHashCode()
                     + 53 * dialogText.GetHashCode()
 
-                    + 53 * (textColor == null ? 13 : textColor.GetHashCode())
+                    + 53 * textColor.GetHashCode()
                     + 53 * (textFont == null ? 17 : textFont.GetHashCode())
 
                     ;
         }
     }
 
-    void Start()
-    {
-    }
-
-    private int _lastChangeHash = 0;
+    private int _lastChangeHash;
 
     void Update()
     {
@@ -158,7 +153,7 @@ public class OverlayController : MonoBehaviour
                 backgroundTop = 0;
                 textLeft = paddingWidth;
                 break;
-            case CharacterAlignment.TopLeft:
+            //case CharacterAlignment.TopLeft:
             default:
                 spriteLeft = paddingWidth;
                 spriteTop = paddingHeight;
@@ -184,9 +179,11 @@ public class OverlayController : MonoBehaviour
 
         if (_gTextStyle == null)
         {
-            _gTextStyle = new GUIStyle();
-            _gTextStyle.wordWrap = true;
-            _gTextStyle.alignment = TextAnchor.MiddleCenter;
+            _gTextStyle = new GUIStyle
+            {
+                wordWrap = true, 
+                alignment = TextAnchor.MiddleCenter
+            };
         }
 
         _gTextStyle.normal.textColor = new Color(textColor.r, textColor.g, textColor.b, 1);

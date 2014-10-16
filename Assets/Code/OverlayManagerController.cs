@@ -1,47 +1,65 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [ExecuteInEditMode]
 public class OverlayManagerController : MonoBehaviour
 {
-
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         DisplayChildren();
     }
 
-    private int childIndex = 0;
+    private int _lastVisibleChildIndex = 0;
+    public int visibleChildIndex = 0;
+
+    private static bool IsEditMode
+    {
+        get
+        {
+            return Application.isEditor && !UnityEditor.EditorApplication.isPlaying;
+        }
+    }
 
     private void DisplayChildren()
     {
-        foreach (var c in GetComponentsInChildren<OverlayController>())
+        if (IsEditMode)
+        {
+            var i = 0;
+            foreach (Transform c in transform)
+            {
+                if (c.gameObject.activeSelf && i != _lastVisibleChildIndex)
+                {
+                    visibleChildIndex = i;
+                    break;
+                }
+                i++;
+            }
+        }
+
+        foreach (Transform c in transform)
         {
             c.gameObject.SetActive(false);
         }
 
-        if (_isPaused)
+        if (_isPaused || IsEditMode)
         {
             RotateChildIndex();
-            transform.GetChild(childIndex).gameObject.SetActive(true);
+            transform.GetChild(visibleChildIndex).gameObject.SetActive(true);
         }
+
+        _lastVisibleChildIndex = visibleChildIndex;
     }
 
     private void RotateChildIndex()
     {
         var childCount = transform.childCount;
 
-        if (childIndex < 0)
+        if (visibleChildIndex < 0)
         {
-            childIndex = childCount - 1;
+            visibleChildIndex = childCount - 1;
         }
-        else if (childIndex > childCount - 1)
+        else if (visibleChildIndex > childCount - 1)
         {
-            childIndex = 0;
+            visibleChildIndex = 0;
         }
     }
 
@@ -50,38 +68,44 @@ public class OverlayManagerController : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.depth = -10000;
-
-        if (!_isPaused)
+        if (!IsEditMode)
         {
-            if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "FREEZE"))
-            {
-                _isPaused = true;
-                DisplayChildren();
-            }
-        }
-        else
-        {
-            if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "PLAY"))
-            {
-                _isPaused = false;
-                DisplayChildren();
-            }
+            GUI.depth = -10000;
 
-            if (GUI.Button(new Rect(Screen.width * 0.3f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "PREV"))
+            if (!_isPaused)
             {
-                childIndex--;
-                RotateChildIndex();
-                DisplayChildren();
+                if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "FREEZE"))
+                {
+                    _isPaused = true;
+                    DisplayChildren();
+                    Time.timeScale = 0;
+                }
             }
-
-            if (GUI.Button(new Rect(Screen.width * 0.6f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "NEXT"))
+            else
             {
-                childIndex++;
-                RotateChildIndex();
-                DisplayChildren();
-            }
 
+                if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "PLAY"))
+                {
+                    _isPaused = false;
+                    DisplayChildren();
+                    Time.timeScale = 1;
+                }
+
+                if (GUI.Button(new Rect(Screen.width * 0.3f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "PREV"))
+                {
+                    visibleChildIndex--;
+                    RotateChildIndex();
+                    DisplayChildren();
+                }
+
+                if (GUI.Button(new Rect(Screen.width * 0.6f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "NEXT"))
+                {
+                    visibleChildIndex++;
+                    RotateChildIndex();
+                    DisplayChildren();
+                }
+
+            }
         }
     }
 }

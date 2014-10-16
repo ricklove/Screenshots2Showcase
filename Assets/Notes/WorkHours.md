@@ -75,9 +75,17 @@ Screenshots 2 Showcase
 
 - Add overlay manager game object to switch between overlays
 
+### 2014-10-15 5:30-6:26
+
+- Add freeze button
+- Freeze game time during pause
+- Change layouts during pause
 
 
 # TODO
+
+- Add screenshot button
+
 - FUTURE: Choose between text rendering mode
 	- onGUI
 	- NGUI
