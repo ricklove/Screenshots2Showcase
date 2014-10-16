@@ -81,10 +81,16 @@ Screenshots 2 Showcase
 - Freeze game time during pause
 - Change layouts during pause
 
+### 2014-10-16 6:00-7:00
+### 8:00-8:26
+
+- Add screenshot button
+- Save screenshots
+
 
 # TODO
 
-- Add screenshot button
+- Change resolution to actual targets
 
 - FUTURE: Choose between text rendering mode
 	- onGUI
