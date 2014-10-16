@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -186,7 +185,8 @@ public class OverlayManagerController : MonoBehaviour
         //sizes.Add(new Rect(0, 0, 150, 100));
         //sizes.Add(new Rect(0, 0, 100, 150));
 
-        var sizes = ScreenshotSizeHelper.ScreenShotSizes;
+        var sizes = ScreenshotSizeHelper.ScreenShotSizes.ToList();
+        sizes.Insert(0, new Rect(0, 0, Screen.width, Screen.height));
 
         foreach (var s in sizes)
         {
@@ -210,10 +210,25 @@ public class OverlayManagerController : MonoBehaviour
 
             _screenshotSteps.Add(() =>
             {
-                Application.CaptureScreenshot(
-                    folderPath
-                    + index
-                    + " - " + (int)size.width + "x" + (int)size.height + ".png", 1);
+                if (Screen.width == (int)size.width
+                    && Screen.height == (int)size.height)
+                {
+                    Application.CaptureScreenshot(
+                        folderPath
+                        + index
+                        + " - " + (int)size.width + "x" + (int)size.height + ".png", 1);
+                }
+                else
+                {
+                    if (Application.isEditor)
+                    {
+                        Debug.Log("Cannot change resolution in editor preview. Run as standalone to create screenshots.");
+                    }
+                    else
+                    {
+                        Debug.Log("Failed to change resolution to " + " - " + (int)size.width + "x" + (int)size.height);
+                    }
+                }
             });
 
             _pauseScreenshotCount++;
@@ -264,7 +279,7 @@ public static class ScreenshotSizeHelper
 
                 foreach (var line in lines)
                 {
-                    var parts = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var parts = line.Split(new[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                     int a;
                     int b;
