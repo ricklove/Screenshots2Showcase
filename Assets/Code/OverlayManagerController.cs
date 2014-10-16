@@ -43,7 +43,10 @@ public class OverlayManagerController : MonoBehaviour
         if (_isPaused || IsEditMode)
         {
             RotateChildIndex();
-            transform.GetChild(visibleChildIndex).gameObject.SetActive(true);
+            if (transform.childCount > 0)
+            {
+                transform.GetChild(visibleChildIndex).gameObject.SetActive(true);
+            }
         }
 
         _lastVisibleChildIndex = visibleChildIndex;
@@ -52,6 +55,12 @@ public class OverlayManagerController : MonoBehaviour
     private void RotateChildIndex()
     {
         var childCount = transform.childCount;
+
+        if (childCount == 0)
+        {
+            visibleChildIndex = 0;
+            return;
+        }
 
         if (visibleChildIndex < 0)
         {

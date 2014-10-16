@@ -663,15 +663,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: adc8fb2bacfef0b49ad12095434e9362, type: 3}
-  background: {fileID: 21300000, guid: eef2ffc60fbed6c4dabb49c84bcfbb86, type: 3}
-  characterAlignment: 0
+  character: {fileID: 21300000, guid: 686e71c854867e24c994105667b4396f, type: 3}
+  background: {fileID: 21300000, guid: 182cc31e77ea70d498e19ad5d4c6be10, type: 3}
+  characterAlignment: 3
   dialogHeightRatio: .25
   paddingRatio: .0199999996
   maxCharacterWidthRatio: .400000006
   maxCharacterHeightRatio: .400000006
   dialogText: I like it!
-  textColor: {r: .227450982, g: .301960796, b: .0549019612, a: 0}
+  textColor: {r: .525490224, g: .4627451, b: .274509817, a: 0}
   textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
 --- !u!1 &516157789
 GameObject:
