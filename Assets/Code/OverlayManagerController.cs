@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -33,7 +34,11 @@ public class OverlayManagerController : MonoBehaviour
     {
         get
         {
+#if UNITY_EDITOR
             return Application.isEditor && !UnityEditor.EditorApplication.isPlaying;
+#else
+            return false;
+#endif
         }
     }
 
@@ -169,10 +174,15 @@ public class OverlayManagerController : MonoBehaviour
 
         var dateTimeString = DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
 
-        var sizes = new List<Rect>();
-        sizes.Add(new Rect(0, 0, 100, 100));
-        sizes.Add(new Rect(0, 0, 150, 100));
-        sizes.Add(new Rect(0, 0, 100, 150));
+        var originalSize = new Rect(0, 0, Screen.width, Screen.height);
+
+        //var sizes = new List<Rect>();
+
+        //sizes.Add(new Rect(0, 0, 800, 600));
+        //sizes.Add(new Rect(0, 0, 150, 100));
+        //sizes.Add(new Rect(0, 0, 100, 150));
+
+        var sizes = ScreenshotSizeHelper.ScreenShotSizes;
 
         var i = 0;
 
@@ -180,6 +190,15 @@ public class OverlayManagerController : MonoBehaviour
         {
             var size = s;
             var index = i;
+
+            // Skip impossible sizes
+            var resolution = Screen.currentResolution;
+            if (size.width > resolution.width
+                || size.height > resolution.height)
+            {
+                Debug.Log("Resolution not big enough for size: " + size.width + "x" + size.height);
+                continue;
+            }
 
             _screenshotSteps.Add(() =>
             {
@@ -193,11 +212,16 @@ public class OverlayManagerController : MonoBehaviour
                     folderPath
                     + dateTimeString
                     + " - " + index
-                    + " - " + (int)size.width + "x" + (int)size.height + ".png", 2);
+                    + " - " + (int)size.width + "x" + (int)size.height + ".png", 1);
             });
 
             i++;
         }
+
+        _screenshotSteps.Add(() =>
+        {
+            Screen.SetResolution((int)originalSize.width, (int)originalSize.height, false);
+        });
 
         _screenshotSteps.Add(() =>
         {
@@ -220,5 +244,94 @@ public static class ExplorerHelper
         System.Diagnostics.Process.Start("explorer.exe", path);
 #endif
     }
+}
+
+public static class ScreenshotSizeHelper
+{
+    private static List<Rect> _screenShotSizes;
+    public static List<Rect> ScreenShotSizes
+    {
+        get
+        {
+            if (_screenShotSizes == null)
+            {
+                var lines = ScreenShotsSizesText.Split('\r', '\n')
+                    .Where(l => !string.IsNullOrEmpty(l) && !string.IsNullOrEmpty(l.Trim()) && !l.StartsWith("//"))
+                    .ToList();
+
+                var sizes = new List<Rect>();
+
+                foreach (var line in lines)
+                {
+                    var parts = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    int a;
+                    int b;
+
+                    if (parts.Length >= 2 && int.TryParse(parts[0], out a) && int.TryParse(parts[1], out b))
+                    {
+                        sizes.Add(new Rect(0, 0, a, b));
+                        sizes.Add(new Rect(0, 0, b, a));
+                    }
+                    else
+                    {
+                        Debug.Log("Invalid screen size entry: " + line);
+                    }
+                }
+
+                _screenShotSizes = sizes;
+            }
+
+            return _screenShotSizes;
+        }
+    }
+
+    public static string ScreenShotsSizesText = @"
+// width	height		zoom	name
+// All sizes are portrait
+
+// Apple
+640 	960			2		iPhone4			
+640 	1136		2		iPhone5			
+768 	1024		1		iPad			
+1536 	2048		2		iPadHi			
+
+// Android
+
+// From http://stackoverflow.com/questions/6272384/most-popular-screen-sizes-resolutions-on-android-phones
+// http://developer.android.com/guide/practices/screens_support.html#testing
+
+1600		2560	2		Android_XLarge
+//768		1366	1.5		Android_XLarge
+
+1200	1920		2		Android_XLarge
+800		1280		1.5		Android_XLarge	
+//768		1280		1.5		Android_XLarge
+//800		1024		1		Android_XLarge
+//768		1024		1		Android_XLarge
+600		1024		1		Android_Large
+							
+640		960		2		Android_Normal
+//540		960		2		Android_Normal
+//480		854		1.5		Android_Normal
+//600		800		1.5		Android_Normal
+480		800			1.5		Android_Normal
+//400		800			1.5		Android_Normal
+320		480			1		Android_Normal
+
+240		320			1		Android_Small
+		
+// Kindle Fire (3rd generation Covered by other x-large androids)
+
+//2560	1600		2		KindleFireHDX_3rd_8_9
+//1920	1200		2		KindleFireHDX_3rd_7
+//1280	800			1.5		KindleFireHD_3rd_7
+
+//1920	1200		1.5		KindleFireHD_2nd_8_9
+//1280	800			1.5		KindleFireHD_2nd_7
+//1024	600			1		KindleFire_2nd
+
+//1024	600			1		KindleFire_1st
+";
 }
 

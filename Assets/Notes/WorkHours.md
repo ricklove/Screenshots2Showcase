@@ -87,10 +87,14 @@ Screenshots 2 Showcase
 - Add screenshot button
 - Save screenshots
 
+### 8:27-9:14
+
+- Change resolution to actual resolutions
+
 
 # TODO
 
-- Change resolution to actual targets
+
 
 - FUTURE: Choose between text rendering mode
 	- onGUI
