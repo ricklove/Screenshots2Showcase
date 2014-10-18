@@ -3,11 +3,11 @@ Screenshots 2 Showcase
 
 # Description
 
-Save time and sell your games on the app stores fast!
+**Save time and sell your games on the app stores fast!**
 
-Screenshots 2 Showcase will make great screenshots for your game at multiple resolutions.
+Screenshots 2 Showcase will make great screenshots for your game at **multiple resolutions**.
 
-First, you create a screenshot layout in Unity by selecting a character, a background, text, style, and layout.
+First, you create a screenshot layout in Unity by selecting a **character**, a **background**, **text**, **text style**, and **character position**.
 
 You can create as many screenshot layouts as needed and even add extra game objects as part of the layout.
 
@@ -15,8 +15,7 @@ Then, run the game as Standalone to create the screenshots.
 
 Freeze the game, select the screenshot layout, then push the screenshot button to take screenshots of the game at every resolution required.
 
-
-This reduces the tedious task of making screenshots to only a few seconds.
+**This reduces the tedious task of making screenshots to only a few seconds.**
 
 
 
