@@ -1,27 +1,78 @@
 ﻿using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// An overlay displays a character and dialog above other screen content
+/// </summary>
 [ExecuteInEditMode]
 public class OverlayController : MonoBehaviour
 {
-
+    /// <summary>
+    /// The character speaking
+    /// </summary>
     public Sprite character;
+
+    /// <summary>
+    /// The background for the dialog area
+    /// </summary>
     public Sprite background;
+
+    /// <summary>
+    /// The character's location
+    /// </summary>
     public CharacterAlignment characterAlignment;
+
+    /// <summary>
+    /// The dialog's height in ratio of screen height
+    /// </summary>
     public float dialogHeightRatio = 0.25f;
+
+    /// <summary>
+    /// The padding around the character and the dialog text in ratio of the screen size
+    /// </summary>
     public float paddingRatio = 0.05f;
 
+    /// <summary>
+    /// The maximum width of the character in ratio of screen width
+    /// </summary>
     public float maxCharacterWidthRatio = 0.25f;
+
+    /// <summary>
+    /// The maximum height of the character in ratio of screen height
+    /// </summary>
     public float maxCharacterHeightRatio = 0.25f;
 
+    /// <summary>
+    /// The text for the dialog
+    /// </summary>
     public string dialogText = "Great!";
 
+    /// <summary>
+    /// The color of the dialog text
+    /// </summary>
     public Color textColor;
+
+    /// <summary>
+    /// The font of the dialog text
+    /// </summary>
     public Font textFont;
 
-    //public GUIStyle textStyle = GUI.skin.label;
 
-    public int ChangeHash
+    private Texture2D _gSpriteTexture;
+    private Rect _gSpriteRect;
+    private bool _gSpriteShouldFlip;
+
+    private Texture2D _gBackgroundTexture;
+    private Rect _gBackgroundRect;
+
+    private string _gText;
+    private Rect _gTextRect;
+    private GUIStyle _gTextStyle;
+    private int _gTextFontSize;
+
+    private int _lastChangeHash;
+
+    private int ChangeHash
     {
         get
         {
@@ -57,7 +108,6 @@ public class OverlayController : MonoBehaviour
         }
     }
 
-    private int _lastChangeHash;
 
     void Update()
     {
@@ -73,23 +123,9 @@ public class OverlayController : MonoBehaviour
         }
     }
 
-
-    private Texture2D _gSpriteTexture;
-    private Rect _gSpriteRect;
-    private bool _gSpriteShouldFlip;
-
-    private Texture2D _gBackgroundTexture;
-    private Rect _gBackgroundRect;
-
-    private string _gText;
-    private Rect _gTextRect;
-    private GUIStyle _gTextStyle;
-    private int _gTextFontSize;
-
-    void Redraw()
+    private void Redraw()
     {
         // Calculate all rects in screen ratios
-
         var paddingWidth = paddingRatio;
         var paddingHeight = paddingRatio;
 
@@ -250,6 +286,9 @@ public class OverlayController : MonoBehaviour
 
 }
 
+/// <summary>
+/// Options for the Character's Alignment
+/// </summary>
 public enum CharacterAlignment
 {
     BottomLeft,
@@ -259,8 +298,19 @@ public enum CharacterAlignment
 }
 
 
+/// <summary>
+/// A Helper class for calculating the font size
+/// </summary>
 public static class FontSizeHelper
 {
+    /// <summary>
+    /// Calculate the maximum font size for the given text to fill a specific size
+    /// </summary>
+    /// <param name="text">The text</param>
+    /// <param name="width">The width of the text area</param>
+    /// <param name="height">The height of the text area</param>
+    /// <param name="style">The gui style to use for the text</param>
+    /// <returns>The maximum font size for the text to fill the area</returns>
     public static int CalculateFontSizeToFill(string text, float width, float height, GUIStyle style)
     {
         var oSize = style.fontSize;

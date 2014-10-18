@@ -95,9 +95,30 @@ Screenshots 2 Showcase
 
 - Organize Screenshot folder
 
+### 2014-10-18 4:16-4:17
+
+- Create promotionals
+	- big - 860 x 389 (live area 550 x 330)
+	- small - 200 x 258 (live area 175 x 100)
+	- icon - 128 x 128
+
+- Document code
+
 # TODO
 
+- Implement Undo for Editor Buttons
+	 - http://docs.unity3d.com/ScriptReference/Undo.html
 
+- Publish
+	- Create documentation
+		- Description
+		- How to use
+		- Version History
+	- Create promotionals
+		- big - 860 x 389 (live area 550 x 330)
+		- small - 200 x 258 (live area 175 x 100)
+		- icon - 128 x 128
+	- Create screenshots
 
 - FUTURE: Choose between text rendering mode
 	- onGUI

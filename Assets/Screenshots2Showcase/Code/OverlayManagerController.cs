@@ -4,9 +4,19 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// An overlay manager allows freezing the game, selecting an overlay, and making a screenshot
+/// </summary>
 [ExecuteInEditMode]
 public class OverlayManagerController : MonoBehaviour
 {
+    /// <summary>
+    /// The overlay child that is currently visible
+    /// </summary>
+    public int visibleChildIndex = 0;
+
+    private int _lastVisibleChildIndex = 0;
+
     void Update()
     {
         UpdateOverlays();
@@ -26,9 +36,6 @@ public class OverlayManagerController : MonoBehaviour
         }
     }
 
-    private int _lastVisibleChildIndex = 0;
-    public int visibleChildIndex = 0;
-
     private static bool IsEditMode
     {
         get
@@ -41,6 +48,9 @@ public class OverlayManagerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update the scene to show the current overlay
+    /// </summary>
     public void UpdateOverlays()
     {
         if (IsEditMode)
@@ -153,9 +163,8 @@ public class OverlayManagerController : MonoBehaviour
     }
 
     private List<Action> _screenshotSteps;
-
-
     private static bool _hasShownExplorer = false;
+    
     void CreateScreenshotSteps()
     {
         Debug.Log("CreateScreenshotSteps Start");
@@ -249,9 +258,15 @@ public class OverlayManagerController : MonoBehaviour
 
 }
 
-
+/// <summary>
+/// Open Windows explorer at a certain path
+/// </summary>
 public static class ExplorerHelper
 {
+    /// <summary>
+    /// Show a path in windows explorer
+    /// </summary>
+    /// <param name="path">The path to show</param>
     public static void ShowInExplorer(string path)
     {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
@@ -262,9 +277,16 @@ public static class ExplorerHelper
     }
 }
 
+/// <summary>
+/// Screenshot sizes
+/// </summary>
 public static class ScreenshotSizeHelper
 {
     private static List<Rect> _screenShotSizes;
+
+    /// <summary>
+    /// A list of screenshot sizes
+    /// </summary>
     public static List<Rect> ScreenShotSizes
     {
         get
@@ -302,9 +324,21 @@ public static class ScreenshotSizeHelper
         }
     }
 
-    public static string ScreenShotsSizesText = @"
+    private static string ScreenShotsSizesText = @"
 // width	height		zoom	name
 // All sizes are portrait
+
+// Unity Store
+128 128
+
+100 175
+127 192
+// 200 x 258
+
+389 486
+389 495
+// 389 860
+
 
 // Apple
 640 	960			2		iPhone4			
