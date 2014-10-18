@@ -214,10 +214,10 @@ public class OverlayController : MonoBehaviour
             _gSpriteTexture = character.texture;
             _gSpriteShouldFlip = flipSprite;
             _gSpriteRect = new Rect(
-                Screen.width*spriteLeft, 
-                Screen.height*spriteTop, 
-                Screen.width*spriteWidth,
-                Screen.height*spriteHeight);
+                Screen.width * spriteLeft,
+                Screen.height * spriteTop,
+                Screen.width * spriteWidth,
+                Screen.height * spriteHeight);
         }
         else
         {
@@ -313,6 +313,14 @@ public static class FontSizeHelper
     /// <returns>The maximum font size for the text to fill the area</returns>
     public static int CalculateFontSizeToFill(string text, float width, float height, GUIStyle style)
     {
+        if (string.IsNullOrEmpty(text) 
+            || width < 0
+            || height < 0
+            || style == null)
+        {
+            return 10;
+        }
+
         var oSize = style.fontSize;
 
         style.fontSize = (int)(height * 1.0f);

@@ -112,17 +112,23 @@ Screenshots 2 Showcase
 
 - Generate Docs
 
-### 5:05-
+### 5:05-5:27
 
+- Fix Docs Folder
 - Fix buttons width and height
+
+### 5:28-5:47
+
+- Implement Undo for Editor Buttons
+	 - http://docs.unity3d.com/ScriptReference/Undo.html
+
 
 
 # TODO
 
 
 
-- Implement Undo for Editor Buttons
-	 - http://docs.unity3d.com/ScriptReference/Undo.html
+
 
 - Publish
 	- Create documentation
