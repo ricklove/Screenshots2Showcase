@@ -112,13 +112,15 @@ public class OverlayManagerController : MonoBehaviour
 
     void OnGUI()
     {
+        var xCenter = Screen.width * 0.5f;
+
         if (!IsEditMode && !_isTakingScreenshots)
         {
             GUI.depth = -10000;
 
             if (!_isPaused)
             {
-                if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "FREEZE"))
+                if (GUI.Button(new Rect(xCenter - 50, 10, 100, 30), "FREEZE"))
                 {
                     _isPaused = true;
                     UpdateOverlays();
@@ -130,28 +132,28 @@ public class OverlayManagerController : MonoBehaviour
             else
             {
 
-                if (GUI.Button(new Rect(Screen.width * 0.45f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "PLAY"))
+                if (GUI.Button(new Rect(xCenter - 50, 10, 100, 30), "PLAY"))
                 {
                     _isPaused = false;
                     UpdateOverlays();
                     Time.timeScale = 1;
                 }
 
-                if (GUI.Button(new Rect(Screen.width * 0.3f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "PREV"))
+                if (GUI.Button(new Rect(xCenter - 50 -110, 10, 100, 30), "PREV"))
                 {
                     visibleChildIndex--;
                     RotateChildIndex();
                     UpdateOverlays();
                 }
 
-                if (GUI.Button(new Rect(Screen.width * 0.6f, 10, Screen.width * 0.1f, Screen.height * 0.05f), "NEXT"))
+                if (GUI.Button(new Rect(xCenter - 50 + 110, 10, 100, 30), "NEXT"))
                 {
                     visibleChildIndex++;
                     RotateChildIndex();
                     UpdateOverlays();
                 }
 
-                if (GUI.Button(new Rect(Screen.width * 0.45f, 10 + Screen.height * 0.05f + 10, Screen.width * 0.1f, Screen.height * 0.05f), "SCREENSHOT"))
+                if (GUI.Button(new Rect(xCenter - 60, 10 + 30 + 10, 120, 30), "SCREENSHOTS"))
                 {
                     _isTakingScreenshots = true;
                     CreateScreenshotSteps();
@@ -164,10 +166,10 @@ public class OverlayManagerController : MonoBehaviour
 
     private List<Action> _screenshotSteps;
     private static bool _hasShownExplorer = false;
-    
+
     void CreateScreenshotSteps()
     {
-        Debug.Log("CreateScreenshotSteps Start");
+        Debug.Log("START Taking ScreenShots");
 
         _screenshotSteps = new List<Action>();
 
@@ -251,9 +253,10 @@ public class OverlayManagerController : MonoBehaviour
         _screenshotSteps.Add(() =>
         {
             _isTakingScreenshots = false;
+
+            Debug.Log("END Taking ScreenShots");
         });
 
-        Debug.Log("CreateScreenshotSteps End");
     }
 
 }

@@ -108,11 +108,18 @@ Screenshots 2 Showcase
 
 - Write Readme
 
+### 4:56-5:04
+
+- Generate Docs
+
+### 5:05-
+
+- Fix buttons width and height
 
 
 # TODO
 
-- Fix buttons width and height
+
 
 - Implement Undo for Editor Buttons
 	 - http://docs.unity3d.com/ScriptReference/Undo.html

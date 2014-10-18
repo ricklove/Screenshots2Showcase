@@ -49,7 +49,7 @@ The Demo includes a two root game objects:
 	- Enable a disabled overlay in order to make it current and make it visible
 	- Modify the Overlay properties to change the look of the character, background, text, or layout
 	- See the documentation for a description of each property:
-		-
+		- Code/.Docs/html/class_overlay_controller.html
 
 # Add the OverlayManager to your own game
 
@@ -60,9 +60,13 @@ The Demo includes a two root game objects:
 - Use the above instructions to run your game and create screenshots
 
 
+---
+
 # Browse the Script Code
 
 The script Code is located under the Code folder. It is well documented, so feel free to read through it.
+
+---
 
 # Support
 
@@ -72,3 +76,12 @@ Email me (Rick) for anything:
 	- Request a feature
 
 support@toldpro.com
+
+
+---
+
+# Version History
+
+## 1.0 - 2014-10-18
+
+Initial Release
