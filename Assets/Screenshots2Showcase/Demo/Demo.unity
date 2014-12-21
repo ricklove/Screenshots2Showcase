@@ -272,13 +272,13 @@ MonoBehaviour:
   character: {fileID: 0}
   background: {fileID: 0}
   characterAlignment: 0
-  dialogHeightRatio: .550000012
-  paddingRatio: 0
-  maxCharacterWidthRatio: .800000012
-  maxCharacterHeightRatio: .289999992
-  dialogText: s2s
-  textColor: {r: .90196079, g: .800000012, b: .188235298, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  dialogHeightRatio: .25
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1 &147035007
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,16 +565,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: b67ea75fcc4087b4f852c72ca5638f88, type: 3}
-  background: {fileID: 21300000, guid: c3a9ceafedb36234f9fed854b61f364a, type: 3}
-  characterAlignment: 1
+  character: {fileID: 0}
+  background: {fileID: 0}
+  characterAlignment: 0
   dialogHeightRatio: .25
-  paddingRatio: .0199999996
-  maxCharacterWidthRatio: .5
-  maxCharacterHeightRatio: .5
-  dialogText: This game will make all your wildest dreams come true!
-  textColor: {r: .674509823, g: .600000024, b: .333333343, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!4 &353162567
 Transform:
   m_ObjectHideFlags: 0
@@ -655,7 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86618c9b7e067f4eb27e37198220add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visibleChildIndex: 4
+  visibleChildIndex: 0
 --- !u!4 &475130151
 Transform:
   m_ObjectHideFlags: 0
@@ -716,16 +716,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: 686e71c854867e24c994105667b4396f, type: 3}
-  background: {fileID: 21300000, guid: 182cc31e77ea70d498e19ad5d4c6be10, type: 3}
-  characterAlignment: 3
+  character: {fileID: 0}
+  background: {fileID: 0}
+  characterAlignment: 0
   dialogHeightRatio: .25
-  paddingRatio: .0199999996
-  maxCharacterWidthRatio: .400000006
-  maxCharacterHeightRatio: .400000006
-  dialogText: I like it!
-  textColor: {r: .525490224, g: .4627451, b: .274509817, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1 &516157789
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,16 +816,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: 8e3213b803610e343941c26a731ec452, type: 3}
-  background: {fileID: 21300000, guid: 2266baf311a0fc344a1c719cbf8daabc, type: 3}
-  characterAlignment: 3
+  character: {fileID: 0}
+  background: {fileID: 0}
+  characterAlignment: 0
   dialogHeightRatio: .25
-  paddingRatio: .0199999996
+  paddingRatio: .0500000007
   maxCharacterWidthRatio: .25
   maxCharacterHeightRatio: .25
-  dialogText: Can you help me find my other eye?
-  textColor: {r: .392156869, g: .321568638, b: .168627456, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1 &528362765
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,7 +997,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &552339375
 Transform:
   m_ObjectHideFlags: 0
@@ -1022,16 +1022,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: 9d63c730e047d9b448e04f1dc7cb83ac, type: 3}
-  background: {fileID: 21300000, guid: 30341d4088db7524084c0a1839cfb58c, type: 3}
-  characterAlignment: 2
+  character: {fileID: 0}
+  background: {fileID: 0}
+  characterAlignment: 0
   dialogHeightRatio: .25
-  paddingRatio: .0199999996
-  maxCharacterWidthRatio: .349999994
-  maxCharacterHeightRatio: .349999994
-  dialogText: All these people are crazy!
-  textColor: {r: .654901981, g: .384313732, b: .0980392173, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1001 &563031347
 Prefab:
   m_ObjectHideFlags: 0
@@ -1340,16 +1340,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: ed2830a183e2296479381792bb8b517d, type: 3}
-  background: {fileID: 21300000, guid: eef2ffc60fbed6c4dabb49c84bcfbb86, type: 3}
-  characterAlignment: 1
-  dialogHeightRatio: .140000001
-  paddingRatio: .00999999978
-  maxCharacterWidthRatio: .540000021
-  maxCharacterHeightRatio: .800000012
-  dialogText: My nose is weird!
-  textColor: {r: .227450982, g: .301960796, b: .0549019612, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  character: {fileID: 0}
+  background: {fileID: 0}
+  characterAlignment: 0
+  dialogHeightRatio: .25
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!4 &714385471
 Transform:
   m_ObjectHideFlags: 0
@@ -1533,7 +1533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &988208006
 Transform:
   m_ObjectHideFlags: 0
@@ -1557,16 +1557,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: 63a8389e784557a42a0837c11201a900, type: 3}
-  background: {fileID: 21300000, guid: eef2ffc60fbed6c4dabb49c84bcfbb86, type: 3}
-  characterAlignment: 1
-  dialogHeightRatio: .400000006
-  paddingRatio: .00999999978
-  maxCharacterWidthRatio: .400000006
-  maxCharacterHeightRatio: .800000012
-  dialogText: Screenshots 2 Showcase!
-  textColor: {r: .313725501, g: .254901975, b: .125490203, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  character: {fileID: 0}
+  background: {fileID: 0}
+  characterAlignment: 0
+  dialogHeightRatio: .25
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1 &1044624275
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,16 +1684,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: adc8fb2bacfef0b49ad12095434e9362, type: 3}
-  background: {fileID: 21300000, guid: eef2ffc60fbed6c4dabb49c84bcfbb86, type: 3}
+  character: {fileID: 0}
+  background: {fileID: 0}
   characterAlignment: 0
   dialogHeightRatio: .25
-  paddingRatio: .0199999996
-  maxCharacterWidthRatio: .400000006
-  maxCharacterHeightRatio: .400000006
-  dialogText: Cool Screenshots!
-  textColor: {r: .227450982, g: .301960796, b: .0549019612, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1 &1134392074
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,16 +2028,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: 63a8389e784557a42a0837c11201a900, type: 3}
+  character: {fileID: 0}
   background: {fileID: 0}
-  characterAlignment: 2
-  dialogHeightRatio: 1
-  paddingRatio: .00999999978
-  maxCharacterWidthRatio: .680000007
-  maxCharacterHeightRatio: .800000012
-  dialogText: 
-  textColor: {r: .90196079, g: .800000012, b: .188235298, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  characterAlignment: 0
+  dialogHeightRatio: .25
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1 &1608821857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,16 +2333,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e30695b2a2cd45419005e69e53a5576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 21300000, guid: 63a8389e784557a42a0837c11201a900, type: 3}
-  background: {fileID: 21300000, guid: eef2ffc60fbed6c4dabb49c84bcfbb86, type: 3}
-  characterAlignment: 1
-  dialogHeightRatio: .49000001
-  paddingRatio: .00999999978
-  maxCharacterWidthRatio: .529999971
-  maxCharacterHeightRatio: .800000012
-  dialogText: s2s
-  textColor: {r: .313725501, g: .254901975, b: .125490203, a: 0}
-  textFont: {fileID: 12800000, guid: 7c411191f133be64da07ac2636717d10, type: 3}
+  character: {fileID: 0}
+  background: {fileID: 0}
+  characterAlignment: 0
+  dialogHeightRatio: .25
+  paddingRatio: .0500000007
+  maxCharacterWidthRatio: .25
+  maxCharacterHeightRatio: .25
+  dialogText: Great!
+  textColor: {r: 0, g: 0, b: 0, a: 0}
+  textFont: {fileID: 0}
 --- !u!1 &1997666499
 GameObject:
   m_ObjectHideFlags: 0

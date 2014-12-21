@@ -17,6 +17,15 @@ Freeze the game, select the screenshot layout, then push the screenshot button t
 
 **This reduces the tedious task of making screenshots to only a few seconds.**
 
+This includes characters from the public domain resources of Glitch: 
+
+[Glitch Public Domain Game Art](http://www.glitchthegame.com/public-domain-game-art/)
+
+Created by TOLD:
+
+[TOLD](http://toldpro.com)
+
+<a href="mailto:support@toldpro.com">Email me for Support!</a>
 
 
 # Setup

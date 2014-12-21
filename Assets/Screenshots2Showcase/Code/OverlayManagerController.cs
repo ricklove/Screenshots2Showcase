@@ -275,7 +275,10 @@ public static class ExplorerHelper
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
         path = path.Replace(@"/", @"\");
         //System.Diagnostics.Process.Start("explorer.exe", "/select," + path);
-        System.Diagnostics.Process.Start("explorer.exe", path);
+        // No longer works in Unity 4.6
+        //System.Diagnostics.Process.Start("explorer.exe", path); 
+
+        UnityEditor.EditorUtility.RevealInFinder(path);
 #endif
     }
 }
